@@ -231,19 +231,7 @@ const App: React.FC = () => {
         {/* Google AdSense Ad Slot */}
         <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
           <span className="text-gray-500">Espacio para anuncios de Google AdSense</span>
-          {/* Inserta aquí tu código de anuncio de AdSense. Por ejemplo:
-          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
-               crossorigin="anonymous"></script>
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
-               data-ad-slot="yyyyyyyyyy"
-               data-ad-format="auto"
-               data-full-width-responsive="true"></ins>
-          <script>
-               (adsbygoogle = window.adsbygoogle || []).push({});
-          </script>
-          */}
+<a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" border="0"></a>
         </div>
         {/* End Google AdSense Ad Slot */}
         <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
