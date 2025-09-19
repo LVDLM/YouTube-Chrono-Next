@@ -225,8 +225,26 @@ const App: React.FC = () => {
         </div>
       </main>
 
-      <footer className="w-full max-w-4xl mx-auto text-center py-8 mt-8 text-gray-500">
-        <p>&copy; {new Date().getFullYear()} Chrono-Next. {t('footer')}</p>
+      <footer className="w-full max-w-4xl mx-auto text-center py-8 mt-8 space-y-6 text-gray-500">
+        {/* Google AdSense Ad Slot */}
+        <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
+          <span className="text-gray-500">Espacio para anuncios de Google AdSense</span>
+          {/* Inserta aquí tu código de anuncio de AdSense. Por ejemplo:
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-xxxxxxxxxxxxxxxx"
+               crossorigin="anonymous"></script>
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-xxxxxxxxxxxxxxxx"
+               data-ad-slot="yyyyyyyyyy"
+               data-ad-format="auto"
+               data-full-width-responsive="true"></ins>
+          <script>
+               (adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+          */}
+        </div>
+        {/* End Google AdSense Ad Slot */}
+        <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
       </footer>
     </div>
   );

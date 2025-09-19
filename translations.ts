@@ -1,7 +1,7 @@
 export const translations = {
   en: {
-    title: 'YouTube Chrono-Next',
-    subtitle: 'Paste a YouTube video URL to find the next chronological video from the same channel.',
+    title: 'YouTube2Next',
+    subtitle: 'From your history to the next video.',
     footer: 'Built for efficient binging.',
     
     step1Title: 'Provide your API Key',
@@ -42,8 +42,8 @@ export const translations = {
     byLabel: 'By',
   },
   es: {
-    title: 'YouTube Crono-Siguiente',
-    subtitle: 'Pega la URL de un vídeo de YouTube para encontrar el siguiente vídeo cronológico del mismo canal.',
+    title: 'YouTube2Next',
+    subtitle: 'De tu historial al siguiente vídeo.',
     footer: 'Creado para maratones eficientes.',
     
     step1Title: 'Proporciona tu Clave de API',
