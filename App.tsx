@@ -142,6 +142,8 @@ const App: React.FC = () => {
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
+          <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
+     crossorigin="anonymous"></script>
         </header>
 
         <div className="space-y-8">
