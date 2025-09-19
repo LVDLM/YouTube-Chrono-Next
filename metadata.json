@@ -1,0 +1,5 @@
+{
+  "name": "YouTube Chrono-Next",
+  "description": "An application that takes a YouTube video URL and automatically finds the next chronological video from the same channel, saving you from manually scrolling through hundreds of videos.",
+  "requestFramePermissions": []
+}
