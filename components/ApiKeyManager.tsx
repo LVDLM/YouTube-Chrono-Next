@@ -4,6 +4,7 @@ interface ApiKeyManagerTranslations {
     title: string;
     description: string;
     linkText: string;
+    tutorialLinkText: string;
     placeholder: string;
     saveButton: string;
     savedMessage: string;
@@ -55,6 +56,8 @@ export const ApiKeyManager: React.FC<ApiKeyManagerProps> = ({ savedKey, onSave, 
           <p className="text-sm text-gray-400">
             {translations.description}
              <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:underline ml-1">{translations.linkText}</a>
+             <span className="mx-1 text-gray-500">|</span>
+             <a href="https://www.youtube.com/watch?v=qWUobN0xtcE" target="_blank" rel="noopener noreferrer" className="text-red-400 hover:underline">{translations.tutorialLinkText}</a>
           </p>
           <div className="flex flex-col sm:flex-row gap-2">
              <input

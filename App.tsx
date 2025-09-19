@@ -1,3 +1,4 @@
+
 import React, { useState, useCallback, useEffect } from 'react';
 import { UrlInputForm } from './components/UrlInputForm';
 import { VideoCard } from './components/VideoCard';
@@ -142,8 +143,9 @@ const App: React.FC = () => {
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
+          {/* FIX: Changed crossorigin to crossOrigin to align with React's camelCase prop naming for HTML attributes. */}
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
-     crossorigin="anonymous"></script>
+     crossOrigin="anonymous"></script>
         </header>
 
         <div className="space-y-8">
@@ -161,6 +163,7 @@ const App: React.FC = () => {
                             title: t('apiKeyManagerTitle'),
                             description: t('apiKeyManagerDescription'),
                             linkText: t('apiKeyManagerLink'),
+                            tutorialLinkText: t('apiKeyManagerTutorialLink'),
                             placeholder: t('apiKeyManagerPlaceholder'),
                             saveButton: t('apiKeyManagerSaveButton'),
                             savedMessage: t('apiKeyManagerSavedMessage'),
@@ -231,7 +234,8 @@ const App: React.FC = () => {
         {/* Google AdSense Ad Slot */}
         <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
           <span className="text-gray-500">Espacio para anuncios de Google AdSense</span>
-<a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" border="0"></a>
+{/* FIX: Removed deprecated 'border' attribute from img tag. */}
+<a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" /></a>
         </div>
         {/* End Google AdSense Ad Slot */}
         <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
