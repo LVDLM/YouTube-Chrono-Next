@@ -1,6 +1,6 @@
 import React from 'react';
 
-type Language = 'en' | 'es';
+type Language = 'en' | 'es' | 'ca';
 
 interface LanguageSelectorProps {
   currentLang: Language;
@@ -25,6 +25,13 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLang,
         className={`px-3 py-1 text-sm rounded-md transition-colors ${currentLang === 'es' ? activeClass : inactiveClass}`}
       >
         ES
+      </button>
+      <div className="w-px h-4 bg-gray-600"></div>
+      <button 
+        onClick={() => onLangChange('ca')}
+        className={`px-3 py-1 text-sm rounded-md transition-colors ${currentLang === 'ca' ? activeClass : inactiveClass}`}
+      >
+        CA
       </button>
     </div>
   );

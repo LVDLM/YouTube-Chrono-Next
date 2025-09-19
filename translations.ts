@@ -84,5 +84,48 @@ export const translations = {
     nextVideoTitle: 'Siguiente Vídeo',
     watchOnYouTube: 'Ver en YouTube',
     byLabel: 'De',
+  },
+  ca: {
+    title: 'YouTube2Next',
+    subtitle: 'Del teu historial al següent vídeo.',
+    footer: 'Creat per a maratons eficients.',
+    
+    step1Title: "Proporciona la teva Clau d'API",
+    step1Description: "Per comunicar-se amb YouTube, aquesta aplicació necessita una clau d'API de YouTube Data v3. És un requisit de Google per prevenir abusos i monitorar l'ús.",
+
+    step2Title: 'Introdueix la URL del Vídeo',
+    step2Description: "Enganxa la URL completa de l'últim vídeo de YouTube que vas veure del canal.",
+
+    step3Title: 'Troba el Següent Vídeo',
+    step3Description: 'Fes clic al botó de sota per iniciar la cerca.',
+    
+    apiKeyManagerTitle: "Gestor de Clau d'API",
+    apiKeyManagerDescription: "Es requereix la teva clau d'API de YouTube Data v3. Es desarà a l'emmagatzematge local del teu navegador.",
+    apiKeyManagerLink: "Aconsegueix una clau d'API aquí.",
+    apiKeyManagerTutorialLink: 'Tutorial',
+    apiKeyManagerPlaceholder: 'Introdueix la teva clau d\'API',
+    apiKeyManagerSaveButton: 'Desa la Clau',
+    apiKeyManagerSavedMessage: "✓ Clau d'API desada i a punt.",
+    apiKeyManagerChangeButton: 'Canvia',
+    apiKeyManagerClearButton: 'Esborra',
+
+    urlInputPlaceholder: 'https://www.youtube.com/watch?v=...',
+
+    searchButton: 'Cerca el Següent Vídeo',
+    searchButtonLoading: 'Cercant...',
+    
+    errorLabel: 'Error:',
+    errorApiKeyRequired: "Es requereix una clau d'API de YouTube. Si us plau, introdueix-la i desa-la al Pas 1.",
+    errorInvalidUrl: 'URL de YouTube no vàlida. Si us plau, proporciona un enllaç de vídeo vàlid al Pas 2.',
+    errorFetchVideoDetails: "No s'han pogut obtenir els detalls del vídeo.",
+    errorFindUploadsPlaylist: "No s'ha pogut trobar la llista de vídeos pujats del canal.",
+    errorVideoNotFoundInUploads: "Vídeo no trobat a les pujades públiques del canal. Podria ser no llistat o privat.",
+    errorLatestVideo: "Aquest és l'últim vídeo del canal. No hi ha un vídeo següent.",
+    errorUnknown: 'Ha ocorregut un error desconegut.',
+
+    currentVideoTitle: 'Vídeo Actual',
+    nextVideoTitle: 'Següent Vídeo',
+    watchOnYouTube: 'Mira a YouTube',
+    byLabel: 'De',
   }
 };
