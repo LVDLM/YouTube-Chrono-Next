@@ -35,3 +35,4 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLang,
       </button>
       </div>
   )
+  );
