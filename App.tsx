@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { UrlInputForm } from './components/UrlInputForm';
 import { VideoCard } from './components/VideoCard';
@@ -7,14 +6,12 @@ import { ErrorMessage } from './components/ErrorMessage';
 import { YouTubeIcon } from './components/YouTubeIcon';
 import { youtubeService } from './services/youtubeService';
 import type { PlaylistItem } from './types';
-import { ApiKeyManager } from './components/ApiKeyManager';
 import { LanguageSelector } from './components/LanguageSelector';
 import { translations } from './translations';
 
-type Language = 'en' | 'es' | 'ca';
+type Language = 'en' | 'es' | 'ca' | 'pe';
 
 const App: React.FC = () => {
-  const [apiKey, setApiKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentVideo, setCurrentVideo] = useState<PlaylistItem | null>(null);
@@ -27,16 +24,25 @@ const App: React.FC = () => {
   }, [language]);
 
   useEffect(() => {
-    const savedApiKey = localStorage.getItem('youtube_api_key');
-    if (savedApiKey) {
-      setApiKey(savedApiKey);
-    }
     const savedLang = localStorage.getItem('chrono_lang') as Language;
-    if (savedLang && ['en', 'es', 'ca'].includes(savedLang)) {
+    if (savedLang && ['en', 'es', 'ca', 'pe'].includes(savedLang)) {
         setLanguage(savedLang);
     }
   }, []);
   
+  // Effect to apply Petiso font style
+  useEffect(() => {
+    if (language === 'pe') {
+      document.body.classList.add('font-petiso');
+    } else {
+      document.body.classList.remove('font-petiso');
+    }
+    // Cleanup function to remove class when component unmounts
+    return () => {
+        document.body.classList.remove('font-petiso');
+    };
+  }, [language]);
+
   // Effect to push ads after component mounts
   useEffect(() => {
     try {
@@ -57,17 +63,6 @@ const App: React.FC = () => {
     setNextVideo(null);
   };
   
-  const handleSaveApiKey = (key: string) => {
-    localStorage.setItem('youtube_api_key', key);
-    setApiKey(key);
-    setError(null); // Clear any "missing key" errors
-  };
-  
-  const handleClearApiKey = () => {
-      localStorage.removeItem('youtube_api_key');
-      setApiKey(null);
-  };
-  
   const handleUrlChange = (newUrl: string) => {
     setUrl(newUrl);
   };
@@ -76,12 +71,6 @@ const App: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     resetState();
-
-    if (!apiKey) {
-      setError(t('errorApiKeyRequired'));
-      setIsLoading(false);
-      return;
-    }
     
     if (!url.trim()) {
         setError(t('errorInvalidUrl'));
@@ -97,18 +86,18 @@ const App: React.FC = () => {
     }
 
     try {
-      const videoDetails = await youtubeService.getVideoDetails(videoId, apiKey);
+      const videoDetails = await youtubeService.getVideoDetails(videoId);
       if (!videoDetails) {
         throw new Error(t('errorFetchVideoDetails'));
       }
       const channelId = videoDetails.snippet.channelId;
 
-      const uploadsPlaylistId = await youtubeService.getChannelUploadsPlaylistId(channelId, apiKey);
+      const uploadsPlaylistId = await youtubeService.getChannelUploadsPlaylistId(channelId);
       if (!uploadsPlaylistId) {
         throw new Error(t('errorFindUploadsPlaylist'));
       }
 
-      const allVideos = await youtubeService.getAllPlaylistItems(uploadsPlaylistId, apiKey);
+      const allVideos = await youtubeService.getAllPlaylistItems(uploadsPlaylistId);
       const currentIndex = allVideos.findIndex(item => item.snippet.resourceId.videoId === videoId);
 
       if (currentIndex === -1) {
@@ -133,7 +122,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [apiKey, url, t]);
+  }, [url, t]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col items-center justify-center p-4 font-sans">
@@ -163,31 +152,6 @@ const App: React.FC = () => {
                 <div className="flex-grow">
                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step1Title')}</h2>
                     <p className="text-gray-400 mb-4">{t('step1Description')}</p>
-                    <ApiKeyManager 
-                        savedKey={apiKey} 
-                        onSave={handleSaveApiKey} 
-                        onClear={handleClearApiKey}
-                        translations={{
-                            title: t('apiKeyManagerTitle'),
-                            description: t('apiKeyManagerDescription'),
-                            linkText: t('apiKeyManagerLink'),
-                            tutorialLinkText: t('apiKeyManagerTutorialLink'),
-                            placeholder: t('apiKeyManagerPlaceholder'),
-                            saveButton: t('apiKeyManagerSaveButton'),
-                            savedMessage: t('apiKeyManagerSavedMessage'),
-                            changeButton: t('apiKeyManagerChangeButton'),
-                            clearButton: t('apiKeyManagerClearButton'),
-                        }}
-                     />
-                </div>
-            </div>
-
-            {/* Step 2 */}
-            <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">2</div>
-                <div className="flex-grow">
-                    <h2 className="text-2xl font-semibold mb-2 text-white">{t('step2Title')}</h2>
-                    <p className="text-gray-400 mb-4">{t('step2Description')}</p>
                     <UrlInputForm 
                       url={url}
                       onUrlChange={handleUrlChange}
@@ -199,12 +163,12 @@ const App: React.FC = () => {
                 </div>
             </div>
 
-            {/* Step 3 */}
+            {/* Step 2 */}
             <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">3</div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">2</div>
                 <div className="flex-grow">
-                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step3Title')}</h2>
-                     <p className="text-gray-400 mb-4">{t('step3Description')}</p>
+                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step2Title')}</h2>
+                     <p className="text-gray-400 mb-4">{t('step2Description')}</p>
                      <button
                         type="submit"
                         form="video-form"

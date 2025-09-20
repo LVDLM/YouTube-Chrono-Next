@@ -1,5 +1,5 @@
 import type { VideoListResponse, ChannelListResponse, PlaylistItemListResponse, PlaylistItem } from '../types';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL, YOUTUBE_API_KEY } from '../constants';
 
 const handleApiError = async (response: Response, defaultMessage: string) => {
   if (response.ok) {
@@ -38,28 +38,28 @@ const extractVideoId = (url: string): string | null => {
   return null;
 };
 
-const getVideoDetails = async (videoId: string, apiKey: string) => {
-  const url = `${API_BASE_URL}/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+const getVideoDetails = async (videoId: string) => {
+  const url = `${API_BASE_URL}/videos?part=snippet&id=${videoId}&key=${YOUTUBE_API_KEY}`;
   const response = await fetch(url);
   await handleApiError(response, 'Failed to fetch video details from YouTube API.');
   const data: VideoListResponse = await response.json();
   return data.items[0] ?? null;
 };
 
-const getChannelUploadsPlaylistId = async (channelId: string, apiKey:string) => {
-  const url = `${API_BASE_URL}/channels?part=contentDetails&id=${channelId}&key=${apiKey}`;
+const getChannelUploadsPlaylistId = async (channelId: string) => {
+  const url = `${API_BASE_URL}/channels?part=contentDetails&id=${channelId}&key=${YOUTUBE_API_KEY}`;
   const response = await fetch(url);
   await handleApiError(response, 'Failed to fetch channel details from YouTube API.');
   const data: ChannelListResponse = await response.json();
   return data.items[0]?.contentDetails.relatedPlaylists.uploads ?? null;
 };
 
-const getAllPlaylistItems = async (playlistId: string, apiKey: string): Promise<PlaylistItem[]> => {
+const getAllPlaylistItems = async (playlistId: string): Promise<PlaylistItem[]> => {
   let allItems: PlaylistItem[] = [];
   let nextPageToken: string | undefined = undefined;
 
   do {
-    let url = `${API_BASE_URL}/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&key=${apiKey}`;
+    let url = `${API_BASE_URL}/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=50&key=${YOUTUBE_API_KEY}`;
     if (nextPageToken) {
       url += `&pageToken=${nextPageToken}`;
     }
