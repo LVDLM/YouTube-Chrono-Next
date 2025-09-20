@@ -1,13 +1,21 @@
 {
-  "name": "youtube-netlify-backend",
-  "version": "1.0.0",
-  "description": "YouTube API proxy with Netlify Functions",
+  "name": "youtube-chrono-next",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
   "scripts": {
-    "dev": "netlify dev",
-    "build": "echo 'No build step needed'"
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
   },
-  "dependencies": {},
+  "dependencies": {
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1"
+  },
   "devDependencies": {
-    "netlify-cli": "^17.0.0"
+    "@types/node": "^22.14.0",
+    "@vitejs/plugin-react": "^5.0.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.0"
   }
 }
