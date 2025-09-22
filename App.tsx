@@ -252,17 +252,17 @@ const App: React.FC = () => {
 
       <footer className="w-full max-w-4xl mx-auto text-center py-8 mt-8 space-y-6 text-gray-500">
         {/* Google AdSense Ad Slot */}
-        <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
-            {/* The AdSense script is loaded in the header. This is the ad unit. */}
-            <ins className="adsbygoogle"
-                 style={{ display: 'block' }}
-                 data-ad-client="ca-pub-7358681009913510"
-                 data-ad-slot="9216486093"
-                 data-ad-format="auto"
-                 data-full-width-responsive="true"></ins>
-            {/* The script to push the ad is handled in a useEffect hook for proper execution in React. */}
-            <a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" /></a>
-        </div>
+{/* FIX: The following AdSense code was not valid JSX. Corrected 'crossorigin' to 'crossOrigin', 'class' to 'className', the style attribute to an object, converted HTML comments to JSX comments, and removed the redundant inline script. */}
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
+     crossOrigin="anonymous"></script>
+{/* Youtube2Next */}
+<ins className="adsbygoogle"
+     style={{display:"block"}}
+     data-ad-client="ca-pub-7358681009913510"
+     data-ad-slot="9216486093"
+     data-ad-format="auto"
+     data-full-width-responsive="true"></ins>
+{/* The inline script to push the ad has been removed as its logic is handled by a useEffect hook in this component. */}
         {/* End Google AdSense Ad Slot */}
         <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
       </footer>
