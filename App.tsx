@@ -7,12 +7,14 @@ import { ErrorMessage } from './components/ErrorMessage';
 import { YouTubeIcon } from './components/YouTubeIcon';
 import { youtubeService } from './services/youtubeService';
 import type { PlaylistItem } from './types';
+import { ApiKeyManager } from './components/ApiKeyManager';
 import { LanguageSelector } from './components/LanguageSelector';
 import { translations } from './translations';
 
-type Language = 'en' | 'es' | 'ca' | 'pe';
+type Language = 'en' | 'es' | 'ca';
 
 const App: React.FC = () => {
+  const [apiKey, setApiKey] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
   const [currentVideo, setCurrentVideo] = useState<PlaylistItem | null>(null);
@@ -25,34 +27,16 @@ const App: React.FC = () => {
   }, [language]);
 
   useEffect(() => {
+    const savedApiKey = localStorage.getItem('youtube_api_key');
+    if (savedApiKey) {
+      setApiKey(savedApiKey);
+    }
     const savedLang = localStorage.getItem('chrono_lang') as Language;
-    if (savedLang && ['en', 'es', 'ca', 'pe'].includes(savedLang)) {
+    if (savedLang && ['en', 'es', 'ca'].includes(savedLang)) {
         setLanguage(savedLang);
     }
   }, []);
   
-  // Effect to apply Petiso font style
-  useEffect(() => {
-    if (language === 'pe') {
-      document.body.classList.add('font-petiso');
-    } else {
-      document.body.classList.remove('font-petiso');
-    }
-    // Cleanup function to remove class when component unmounts
-    return () => {
-        document.body.classList.remove('font-petiso');
-    };
-  }, [language]);
-
-  // Effect to push ads after component mounts
-  useEffect(() => {
-    try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-    } catch (e) {
-      console.error('AdSense error:', e);
-    }
-  }, []);
-
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem('chrono_lang', lang);
@@ -64,6 +48,17 @@ const App: React.FC = () => {
     setNextVideo(null);
   };
   
+  const handleSaveApiKey = (key: string) => {
+    localStorage.setItem('youtube_api_key', key);
+    setApiKey(key);
+    setError(null); // Clear any "missing key" errors
+  };
+  
+  const handleClearApiKey = () => {
+      localStorage.removeItem('youtube_api_key');
+      setApiKey(null);
+  };
+  
   const handleUrlChange = (newUrl: string) => {
     setUrl(newUrl);
   };
@@ -72,6 +67,12 @@ const App: React.FC = () => {
     e.preventDefault();
     setIsLoading(true);
     resetState();
+
+    if (!apiKey) {
+      setError(t('errorApiKeyRequired'));
+      setIsLoading(false);
+      return;
+    }
     
     if (!url.trim()) {
         setError(t('errorInvalidUrl'));
@@ -87,18 +88,18 @@ const App: React.FC = () => {
     }
 
     try {
-      const videoDetails = await youtubeService.getVideoDetails(videoId);
+      const videoDetails = await youtubeService.getVideoDetails(videoId, apiKey);
       if (!videoDetails) {
         throw new Error(t('errorFetchVideoDetails'));
       }
       const channelId = videoDetails.snippet.channelId;
 
-      const uploadsPlaylistId = await youtubeService.getChannelUploadsPlaylistId(channelId);
+      const uploadsPlaylistId = await youtubeService.getChannelUploadsPlaylistId(channelId, apiKey);
       if (!uploadsPlaylistId) {
         throw new Error(t('errorFindUploadsPlaylist'));
       }
 
-      const allVideos = await youtubeService.getAllPlaylistItems(uploadsPlaylistId);
+      const allVideos = await youtubeService.getAllPlaylistItems(uploadsPlaylistId, apiKey);
       const currentIndex = allVideos.findIndex(item => item.snippet.resourceId.videoId === videoId);
 
       if (currentIndex === -1) {
@@ -123,7 +124,7 @@ const App: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
-  }, [url, t]);
+  }, [apiKey, url, t]);
 
   return (
     <div className="min-h-screen bg-gray-900 text-gray-200 flex flex-col items-center justify-center p-4 font-sans">
@@ -142,6 +143,7 @@ const App: React.FC = () => {
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
+          {/* FIX: Changed crossorigin to crossOrigin to align with React's camelCase prop naming for HTML attributes. */}
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
      crossOrigin="anonymous"></script>
         </header>
@@ -153,6 +155,31 @@ const App: React.FC = () => {
                 <div className="flex-grow">
                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step1Title')}</h2>
                     <p className="text-gray-400 mb-4">{t('step1Description')}</p>
+                    <ApiKeyManager 
+                        savedKey={apiKey} 
+                        onSave={handleSaveApiKey} 
+                        onClear={handleClearApiKey}
+                        translations={{
+                            title: t('apiKeyManagerTitle'),
+                            description: t('apiKeyManagerDescription'),
+                            linkText: t('apiKeyManagerLink'),
+                            tutorialLinkText: t('apiKeyManagerTutorialLink'),
+                            placeholder: t('apiKeyManagerPlaceholder'),
+                            saveButton: t('apiKeyManagerSaveButton'),
+                            savedMessage: t('apiKeyManagerSavedMessage'),
+                            changeButton: t('apiKeyManagerChangeButton'),
+                            clearButton: t('apiKeyManagerClearButton'),
+                        }}
+                     />
+                </div>
+            </div>
+
+            {/* Step 2 */}
+            <div className="flex items-start gap-4">
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">2</div>
+                <div className="flex-grow">
+                    <h2 className="text-2xl font-semibold mb-2 text-white">{t('step2Title')}</h2>
+                    <p className="text-gray-400 mb-4">{t('step2Description')}</p>
                     <UrlInputForm 
                       url={url}
                       onUrlChange={handleUrlChange}
@@ -164,12 +191,12 @@ const App: React.FC = () => {
                 </div>
             </div>
 
-            {/* Step 2 */}
+            {/* Step 3 */}
             <div className="flex items-start gap-4">
-                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">2</div>
+                <div className="flex h-10 w-10 items-center justify-center rounded-full border-2 border-red-500 bg-gray-800 text-xl font-bold text-red-500 flex-shrink-0">3</div>
                 <div className="flex-grow">
-                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step2Title')}</h2>
-                     <p className="text-gray-400 mb-4">{t('step2Description')}</p>
+                     <h2 className="text-2xl font-semibold mb-2 text-white">{t('step3Title')}</h2>
+                     <p className="text-gray-400 mb-4">{t('step3Description')}</p>
                      <button
                         type="submit"
                         form="video-form"
@@ -205,17 +232,11 @@ const App: React.FC = () => {
 
       <footer className="w-full max-w-4xl mx-auto text-center py-8 mt-8 space-y-6 text-gray-500">
         {/* Google AdSense Ad Slot */}
-{/* FIX: The following AdSense code was not valid JSX. Corrected 'crossorigin' to 'crossOrigin', 'class' to 'className', the style attribute to an object, converted HTML comments to JSX comments, and removed the redundant inline script. */}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
-     crossOrigin="anonymous"></script>
-{/* Youtube2Next */}
-<ins className="adsbygoogle"
-     style={{display:"block"}}
-     data-ad-client="ca-pub-7358681009913510"
-     data-ad-slot="9216486093"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-{/* The inline script to push the ad has been removed as its logic is handled by a useEffect hook in this component. */}
+        <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
+          <span className="text-gray-500">Espacio para anuncios de Google AdSense</span>
+{/* FIX: Removed deprecated 'border' attribute from img tag. */}
+<a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" /></a>
+        </div>
         {/* End Google AdSense Ad Slot */}
         <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
       </footer>

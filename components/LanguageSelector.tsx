@@ -1,6 +1,6 @@
 import React from 'react';
 
-type Language = 'en' | 'es' | 'ca' | 'pe';
+type Language = 'en' | 'es' | 'ca';
 
 interface LanguageSelectorProps {
   currentLang: Language;
@@ -33,6 +33,6 @@ export const LanguageSelector: React.FC<LanguageSelectorProps> = ({ currentLang,
       >
         CA
       </button>
-      </div>
-  )
- };
+    </div>
+  );
+};
