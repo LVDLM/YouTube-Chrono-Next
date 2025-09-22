@@ -1,4 +1,3 @@
-
 import React, { useState, useCallback, useEffect } from 'react';
 import { UrlInputForm } from './components/UrlInputForm';
 import { VideoCard } from './components/VideoCard';
@@ -11,7 +10,7 @@ import { ApiKeyManager } from './components/ApiKeyManager';
 import { LanguageSelector } from './components/LanguageSelector';
 import { translations } from './translations';
 
-type Language = 'en' | 'es' | 'ca';
+type Language = 'en' | 'es' | 'ca' | 'pe';
 
 const App: React.FC = () => {
   const [apiKey, setApiKey] = useState<string | null>(null);
@@ -32,11 +31,33 @@ const App: React.FC = () => {
       setApiKey(savedApiKey);
     }
     const savedLang = localStorage.getItem('chrono_lang') as Language;
-    if (savedLang && ['en', 'es', 'ca'].includes(savedLang)) {
+    if (savedLang && ['en', 'es', 'ca', 'pe'].includes(savedLang)) {
         setLanguage(savedLang);
     }
   }, []);
   
+  // Effect to apply Petiso font style
+  useEffect(() => {
+    if (language === 'pe') {
+      document.body.classList.add('font-petiso');
+    } else {
+      document.body.classList.remove('font-petiso');
+    }
+    // Cleanup function to remove class when component unmounts
+    return () => {
+        document.body.classList.remove('font-petiso');
+    };
+  }, [language]);
+
+  // Effect to push ads after component mounts
+  useEffect(() => {
+    try {
+      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+    } catch (e) {
+      console.error('AdSense error:', e);
+    }
+  }, []);
+
   const handleSetLanguage = (lang: Language) => {
     setLanguage(lang);
     localStorage.setItem('chrono_lang', lang);
@@ -143,7 +164,6 @@ const App: React.FC = () => {
           <p className="text-lg text-gray-400 max-w-2xl mx-auto">
             {t('subtitle')}
           </p>
-          {/* FIX: Changed crossorigin to crossOrigin to align with React's camelCase prop naming for HTML attributes. */}
           <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
      crossOrigin="anonymous"></script>
         </header>
@@ -232,18 +252,17 @@ const App: React.FC = () => {
 
       <footer className="w-full max-w-4xl mx-auto text-center py-8 mt-8 space-y-6 text-gray-500">
         {/* Google AdSense Ad Slot */}
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
-     crossorigin="anonymous"></script>
-
-<ins class="adsbygoogle"
-     style="display:block"
-     data-ad-client="ca-pub-7358681009913510"
-     data-ad-slot="9216486093"
-     data-ad-format="auto"
-     data-full-width-responsive="true"></ins>
-<script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-</script>
+        <div className="w-full h-auto min-h-[100px] bg-gray-800 flex items-center justify-center border border-dashed border-gray-600 rounded-lg p-4">
+            {/* The AdSense script is loaded in the header. This is the ad unit. */}
+            <ins className="adsbygoogle"
+                 style={{ display: 'block' }}
+                 data-ad-client="ca-pub-7358681009913510"
+                 data-ad-slot="9216486093"
+                 data-ad-format="auto"
+                 data-full-width-responsive="true"></ins>
+            {/* The script to push the ad is handled in a useEffect hook for proper execution in React. */}
+            <a href="https://ibb.co/Y4QgCVs0"><img src="https://i.ibb.co/xKLZkrTF/banner.gif" alt="banner" /></a>
+        </div>
         {/* End Google AdSense Ad Slot */}
         <p>&copy; {new Date().getFullYear()} YouTube2Next. {t('footer')}</p>
       </footer>
