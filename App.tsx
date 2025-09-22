@@ -234,7 +234,7 @@ const App: React.FC = () => {
         {/* Google AdSense Ad Slot */}
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7358681009913510"
      crossorigin="anonymous"></script>
-<-- Youtube2Next -->
+
 <ins class="adsbygoogle"
      style="display:block"
      data-ad-client="ca-pub-7358681009913510"
